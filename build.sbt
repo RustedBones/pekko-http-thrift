@@ -1,89 +1,56 @@
-import _root_.io.github.davidgregory084.DevMode
-
 // General info
-val username = "RustedBones"
-val repo     = "akka-http-thrift"
+val username  = "RustedBones"
+val repo      = "pekko-http-thrift"
+val githubUrl = s"https://github.com/$username/$repo"
 
-ThisBuild / tpolecatDefaultOptionsMode := DevMode
-ThisBuild / tpolecatDevModeOptions ~= { opts =>
-  opts.filterNot(
-    Set(
-      ScalacOptions.warnValueDiscard,
-      ScalacOptions.privateWarnValueDiscard
-    )
+ThisBuild / tlBaseVersion    := "1.0"
+ThisBuild / organization     := "fr.davit"
+ThisBuild / organizationName := "Michel Davit"
+ThisBuild / startYear        := Some(2019)
+ThisBuild / licenses         := Seq(License.Apache2)
+ThisBuild / homepage         := Some(url(githubUrl))
+ThisBuild / scmInfo          := Some(ScmInfo(url(githubUrl), s"git@github.com:$username/$repo.git"))
+ThisBuild / developers       := List(
+  Developer(
+    id = s"$username",
+    name = "Michel Davit",
+    email = "michel@davit.fr",
+    url = url(s"https://github.com/$username")
   )
-}
-
-// for sbt-github-actions
-ThisBuild / crossScalaVersions := Seq("2.13.8", "2.12.16")
-ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(name = Some("Check project"), commands = List("scalafmtCheckAll", "headerCheckAll")),
-  WorkflowStep.Sbt(name = Some("Build project"), commands = List("test"))
-)
-ThisBuild / githubWorkflowTargetBranches := Seq("master")
-ThisBuild / githubWorkflowPublishTargetBranches := Seq.empty
-
-lazy val commonSettings = Seq(
-  organization := "fr.davit",
-  organizationName := "Michel Davit",
-  crossScalaVersions := (ThisBuild / crossScalaVersions).value,
-  scalaVersion := crossScalaVersions.value.head,
-  homepage := Some(url(s"https://github.com/$username/$repo")),
-  licenses += ("Apache-2.0", new URL("https://www.apache.org/licenses/LICENSE-2.0.txt")),
-  startYear := Some(2019),
-  scmInfo := Some(ScmInfo(url(s"https://github.com/$username/$repo"), s"git@github.com:$username/$repo.git")),
-  developers := List(
-    Developer(
-      id = s"$username",
-      name = "Michel Davit",
-      email = "michel@davit.fr",
-      url = url(s"https://github.com/$username")
-    )
-  ),
-  publishMavenStyle := true,
-  Test / publishArtifact := false,
-  publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging),
-  releaseCrossBuild := true,
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  credentials ++= (for {
-    username <- sys.env.get("SONATYPE_USERNAME")
-    password <- sys.env.get("SONATYPE_PASSWORD")
-  } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
 )
 
-lazy val `akka-http-thrift-parent` = (project in file("."))
-  .disablePlugins(ScroogeSBT)
-  .aggregate(`akka-http-thrift`, `akka-http-thrift-scrooge`)
-  .settings(commonSettings: _*)
-  .settings(
-    publish / skip := true
-  )
+// scala versions
+val scala3       = "3.3.1"
+val scala213     = "2.13.12"
+val defaultScala = scala3
 
-lazy val `akka-http-thrift` = (project in file("thrift"))
-  .disablePlugins(ScroogeSBT)
-  .settings(commonSettings: _*)
+// github actions
+val java17      = JavaSpec.temurin("17")
+val java11      = JavaSpec.temurin("11")
+val defaultJava = java17
+
+ThisBuild / scalaVersion                 := defaultScala
+ThisBuild / crossScalaVersions           := Seq(scala3, scala213)
+ThisBuild / githubWorkflowTargetBranches := Seq("main")
+ThisBuild / githubWorkflowJavaVersions   := Seq(java17, java11)
+
+// build
+ThisBuild / tlFatalWarnings         := true
+ThisBuild / tlJdkRelease            := Some(8)
+ThisBuild / tlSonatypeUseLegacyHost := true
+
+// mima
+ThisBuild / mimaBinaryIssueFilters ++= Seq()
+
+lazy val `pekko-http-thrift` = (project in file("."))
   .settings(
     libraryDependencies ++= Seq(
-      Dependencies.akkaHttp,
+      Dependencies.pekkoHttp,
       Dependencies.thrift,
-      Dependencies.Provided.akkaStream,
       Dependencies.Provided.logback,
-      Dependencies.Test.akkaTestkit,
-      Dependencies.Test.akkaHttpTestkit,
-      Dependencies.Test.scalaTest
-    )
-  )
-
-lazy val `akka-http-thrift-scrooge` = (project in file("scrooge"))
-  .dependsOn(`akka-http-thrift`)
-  .settings(commonSettings: _*)
-  .settings(
-    libraryDependencies ++= Seq(
-      Dependencies.scrooge,
-      Dependencies.Provided.akkaStream,
-      Dependencies.Provided.logback,
-      Dependencies.Test.akkaTestkit,
-      Dependencies.Test.akkaHttpTestkit,
+      Dependencies.Provided.pekkoStream,
+      Dependencies.Test.pekkoTestkit,
+      Dependencies.Test.pekkoHttpTestkit,
       Dependencies.Test.scalaTest
     )
   )
