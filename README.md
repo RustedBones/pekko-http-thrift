@@ -9,9 +9,9 @@ pekko-http thrift and json marshalling/unmarshalling for Thrift structs
 
 ## Versions
 
-| Version | Release date | pekko Http version | Thrift version | Scala versions |
-|---------|--------------|--------------------|----------------|----------------|
-| `x.x.x` | xxxx-xx-xx   | `x.x.x`            | `x.x.x`        | `x.x.x`        |
+| Version | Release date | pekko Http version | Thrift version | Scala versions     |
+|---------|--------------|--------------------|----------------|--------------------|
+| `1.0.0` | 2023-11-02   | `1.0.0`            | `0.19.0`       | `3.3.1`, `2.13.12` |
 
 The complete list can be found in the [CHANGELOG](CHANGELOG.md) file.
 
