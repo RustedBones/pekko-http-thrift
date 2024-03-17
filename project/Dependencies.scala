@@ -5,7 +5,7 @@ object Dependencies {
   object Versions {
     val logback   = "1.4.14"
     val pekko     = "1.0.2"
-    val pekkoHttp = "1.0.0"
+    val pekkoHttp = "1.0.1"
     val scalaTest = "3.2.17"
     val thrift    = "0.19.0"
   }
