@@ -7,7 +7,7 @@ object Dependencies {
     val pekko     = "1.0.2"
     val pekkoHttp = "1.0.1"
     val scalaTest = "3.2.18"
-    val thrift    = "0.19.0"
+    val thrift    = "0.20.0"
   }
 
   val pekkoHttp = "org.apache.pekko" %% "pekko-http" % Versions.pekkoHttp
