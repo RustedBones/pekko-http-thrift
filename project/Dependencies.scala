@@ -14,11 +14,11 @@ object Dependencies {
   val thrift    = "org.apache.thrift" % "libthrift"  % Versions.thrift
 
   object Provided {
-    val logback     = "ch.qos.logback"    % "logback-classic" % Versions.logback % "provided"
-    val pekkoStream = "org.apache.pekko" %% "pekko-stream"    % Versions.pekko   % "provided"
+    val pekkoStream = "org.apache.pekko" %% "pekko-stream" % Versions.pekko % "provided"
   }
 
   object Test {
+    val logback          = "ch.qos.logback"    % "logback-classic"    % Versions.logback   % "test"
     val pekkoHttpTestkit = "org.apache.pekko" %% "pekko-http-testkit" % Versions.pekkoHttp % "test"
     val pekkoTestkit     = "org.apache.pekko" %% "pekko-testkit"      % Versions.pekko     % "test"
     val scalaTest        = "org.scalatest"    %% "scalatest"          % Versions.scalaTest % "test"
